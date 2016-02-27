@@ -1,0 +1,34 @@
+﻿CREATE TABLE boxscore
+(
+record  VARCHAR(255) NULL
+, ast  VARCHAR(255) NULL
+, blk  VARCHAR(255) NULL
+, date  VARCHAR(255) NULL
+, dreb  VARCHAR(255) NULL
+, fg3a  VARCHAR(255) NULL
+, fg3m  VARCHAR(255) NULL
+, fg3_pct  VARCHAR(255) NULL
+, fga  VARCHAR(255) NULL
+, fgm  VARCHAR(255) NULL
+, fg_pct  VARCHAR(255) NULL
+, fta  VARCHAR(255) NULL
+, ftm  VARCHAR(255) NULL
+, ft_pct  VARCHAR(255) NULL
+, game_id  VARCHAR(255) NULL
+, min  VARCHAR(255) NULL
+, oreb  VARCHAR(255) NULL
+, pf  VARCHAR(255) NULL
+, plus_minus  VARCHAR(255) NULL
+, pts  VARCHAR(255) NULL
+, ptsa  VARCHAR(255) NULL
+, reb  VARCHAR(255) NULL
+, season  VARCHAR(255) NULL
+, stl  VARCHAR(255) NULL
+, team_abbreviation  VARCHAR(255) NULL
+, team_city  VARCHAR(255) NULL
+, team_id  VARCHAR(255) NULL
+, team_name  VARCHAR(255) NULL
+, turnovers  VARCHAR(255) NULL
+, home_away VARCHAR(255) NULL
+, _id  VARCHAR(255) NULL
+);

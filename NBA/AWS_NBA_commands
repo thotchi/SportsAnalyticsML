@@ -1,0 +1,178 @@
+cd /Users/davechi/Documents/Personal/AWS/NBA
+# 	
+
+chmod 400 mms_key2.pem
+chmod 400 NBA_ML.pem
+chmod 400 anaconda.pem
+chmod 400 anaconda_2.pem
+
+ssh -i "mms_key2.pem" ec2-user@52.35.64.75
+
+ssh -i "NBA_ML.pem" ec2-user@54.201.38.222
+
+ssh -i "anaconda.pem" ec2-user@54.67.36.77
+ssh -i "anaconda_2.pem" ubuntu@ec2-54-153-74-94.us-west-1.compute.amazonaws.com
+
+/home/ubuntu
+ubuntu@ip-172-31-5-231:~$ cd data_science
+ubuntu@ip-172-31-5-231:~/data_science$ ls
+boxscore.csv
+
+
+pymongo.mongo_client.MongoClient(host='localhost', port=27017, document_class=dict, tz_aware=False, connect=True, **kwargs)
+
+pymongo.mongo_client.MongoClient(host='localhost', port=27017, document_class=dict, tz_aware=False, connect=True)
+
+import pymongo
+client = pymongo.MongoClient('localhost', 27017)
+db = client['nba']
+cursor = db.boxScores.find();
+cursor[1]
+db.collection_names()
+DFboxscore = pd.DataFrame(list(cursor));
+
+RDS
+DB Instance identifier: dcdb
+Master Username: postgres
+Master Password: postgres
+Database Name: nba
+Database Port: 5432
+Host: dc-db.c0idyhwyzcjh.us-west-1.rds.amazonaws.com
+
+sudo apt-get build-dep python-psycopg2
+pip install psycopg2 
+
+from sqlalchemy import create_engine
+engine = create_engine('postgresql://dc-db.c0idyhwyzcjh.us-west-1.rds.amazonaws.com:5432/nba')
+
+DataFrame.to_sql(boxscore, engine, flavor='sqlite', schema=None, if_exists='fail', index=True, index_label=None, chunksize=None, dtype=None)
+
+DFboxscore.to_csv('/home/ubuntu/data_science/boxscore.csv', sep=';')
+
+# Transfer file from EC2 to local
+scp -i "anaconda_2.pem" ubuntu@ec2-54-153-74-94.us-west-1.compute.amazonaws.com:~/data_science/boxscore.csv ~/boxscore.csv
+
+# mounting EBS
+# attach volume in management console
+# list available disk devices and shows whether they are mounted or not
+$ lsblk 
+# Check filesystems
+$ sudo file -s /dev/xvda1
+$ sudo file -s /dev/xvdf
+# Create a file system on the volume
+$ sudo mkfs -t ext4 xvdf
+# mount the volume
+
+# Mongo function
+def getDatabaseData(hostname,port,collection):
+    # Setup connection to DB
+    client = pymongo.MongoClient(hostname,port)
+    db = client[collection]
+
+    # Initialize List
+    dataList = []
+
+    # Pull data from MongoDB database
+    boxScoreDict = db.boxScores.find()
+
+    # Load database data as row of values for one game
+    for values in boxScoreDict:
+        GAME_ID = int(values.get('GAME_ID'))
+        TEAM_ID = int(values.get('TEAM_ID'))
+        FGM = int(values.get('FGM'))
+        FGA = int(values.get('FGA'))
+        FG_PCT = int(values.get('FG_PCT'))
+        FG3M = int(values.get('FG3M'))
+        FG3A = int(values.get('FG3A'))
+        FG3_PCT = int(values.get('FG3_PCT'))
+        FTM = int(values.get('FTM'))
+        FTA = int(values.get('FTA'))
+        FT_PCT = int(values.get('FT_PCT'))
+        OREB = int(values.get('OREB'))
+        DREB = int(values.get('DREB'))
+        REB = int(values.get('REB'))
+        AST = int(values.get('AST'))
+        STL = int(values.get('STL'))
+        BLK = int(values.get('BLK'))
+        TO = int(values.get('TO'))
+        PF = int(values.get('PF'))
+        PTS = int(values.get('PTS'))
+        PLUS_MINUS = int(values.get('PLUS_MINUS'))
+        dataList.append([GAME_ID,TEAM_ID,FGM,FGA,FG_PCT,FG3M,FG3A,FG3_PCT,
+			FTM,FTA,FT_PCT,OREB,DREB,REB,AST,STL,BLK,TO,PF,PTS,
+			PLUS_MINUS])
+    return dataList
+
+#Load dataset from database
+dataset = getDatabaseData('localhost',27017,'nba') 
+print(dataset)
+
+
+# check disc usage
+sudo du -x / | sort -n | tail -40
+sudo du -hs /home/ubuntu/anaconda3/pkgs/*
+
+sudo mongod
+mongo nba
+db.sigOpt.findOne() ->show you the structure of the information
+
+db.sigOptBox.find().pretty()
+
+# update software
+sudo yum update
+
+# update pip
+pip install --upgrade pip
+
+# install numpy on Linux
+# pip install numpy
+sudo yum install numpy
+
+# install scipy on Linux
+# pip install scipy
+sudo yum install scipy
+
+# install scikit learn
+pip install -U scikit-learn
+
+# install wget
+sudo yum install wget
+
+# install python
+sudo yum install gcc-c++ python27-devel atlas-sse3-devel lapack-devel
+
+# upgrade to Python 2.7.9
+wget https://www.python.org/ftp/python/2.7.9/Python-2.7.9.tgz
+tar xfz Python-2.7.9.tgz
+cd Python-2.7.9/
+./configure --prefix /usr/local/lib/python2.7.9 --enable-ipv6
+make
+sudo make install
+
+
+# install virtualenv
+wget https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.11.2.tar.gz
+tar xzf virtualenv-1.11.2.tar.gz
+python virtualenv-1.11.2/virtualenv.py sk-learn
+
+
+# Start virtual environment
+. sk-learn/bin/activate
+
+#install numpy
+pip install numpy
+
+# check numpy installation
+python -c "import numpy; numpy.show_config()"
+
+# Launch EC2 instance with Anaconda AMI
+# AMI: anaconda3-2.4.1-on-ubuntu-14.04-lts - ami-39ff9759
+
+# connect to EC2 instance
+ssh -i "anaconda_2.pem" ubuntu@ec2-52-53-223-200.us-west-1.compute.amazonaws.com
+
+# import sklearn datasets
+from sklearn import datasets
+iris = datasets.load_iris()
+digits = datasets/load_digits()
+
